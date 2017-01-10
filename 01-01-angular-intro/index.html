@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+    <head>
+        <title></title>
+        <script src="bower_components/angular/angular.js"></script>
+    </head>
+    <body>
+        <h1>Angular Intro</h1>
+        <p>{{dog}}</p>
+        <input ng-model="dog" type="text"/>
+
+        <p id="para"></p>
+        <input id="myInput" type="text"/>
+        <script>
+            var input = document.getElementById("myInput");
+            var para = document.getElementById("para");
+            
+            input.oninput = function(){
+                console.log('oninput')
+                para.innerText = input.value;
+            }
+            
+        </script>
+    </body>
+
+</html>
