@@ -2,41 +2,73 @@
 <html lang="en" ng-app='nameApp'>
     <head>
         <title></title>
-        <script src="bower_components/angular/angular.js"></script>
-        <script src="bower_components/angular-route/angular-route.js"></script>
+        <link rel="stylesheet" type="text/css" href="main.css">
+        <script src="angular/angular.js"></script>
+        <script src="angular-route/angular-route.js"></script>
     </head>
+
     <body ng-controller='MainController'>
-        <a href="#!/main">/main</a>
+      <div>
+        <a href="#!/">home</a>
         <ng-view></ng-view>
-        <form>
-            <label >Name:</label>
-            <input type="text" name="name" ng-model="name" ng-blur="addName()">
+        <form ng-submit="addName()">
+          <input type="text" ng-model="newName.name" placeholder="Name">
+          <input type="text" ng-model="newName.age" placeholder="Age">
+          <input class="hidden" type="submit" value="Add User">
         </form>
         <ul>
-            <li ng-repeat="name in names track by $index">{{ name }}</li>
+          <li ng-repeat="name in names track by $index">Name: <a href="#!/{{ $index }}">{{ name.name }}</a></li>
         </ul>
-
+      </div>
     </body>
     <script>
-        var nameApp = angular.module('nameApp', ['ngRoute']);
-        nameApp.config(['$routeProvider', function($routeProvider){
-            $routeProvider.when('/main', {
-                controller: 'TestController',
+        var nameApp = angular.module("nameApp", ["ngRoute"]);
+
+        nameApp.config(["$routeProvider", function($routeProvider){
+            $routeProvider.when("/main", {
+                controller: "TestController",
                 templateUrl: "partials/_main.html"
+            })
+            .when('/:index', {
+              controller: "UserController",
+              templateUrl: "partials/_user.html"
             });
         }]);
-        nameApp.controller('MainController', ['$scope', function($scope){
-            $scope.names = ['Richard','Kelda', 'Quinten'];
-            $scope.addName = function(){
-                $scope.names.push($scope.name);
-                $scope.name = '';
-            }
-        }]);
-        nameApp.controller('TestController', function($scope){
-            $scope.alertHello = function(){
-                console.log('hello')
-                alert('Hello!');
-            }
+        // MainFactory
+        nameApp.factory("MainFactory", function(){
+          var names = [
+            { name: "Richard", age: 23 },
+            { name: "Kelda", age: 21 },
+            { name: "Quinten", age: 22 },
+          ];
+          var factory = {};
+          factory.getNames = function(callback){
+            callback(names);
+          };
+          factory.getOneName = function(callback){
+            callback(names);
+          };
+          return factory;
         });
+        // MainController
+        nameApp.controller('MainController', ['$scope', 'MainFactory', function($scope, MainFactory){
+          $scope.names = [];
+          MainFactory.getNames(function(data){
+            $scope.names = data;
+          });
+          $scope.addName = function(){
+            $scope.names.push($scope.newName);
+            $scope.newName = {};
+          };
+        }]);
+        // UserController
+        nameApp.controller('UserController', ['$scope', 'MainFactory', '$routeParams', function($scope, MainFactory, $routeParams){
+          $scope.name = {};
+          MainFactory.getOneName(function(data){
+            // To get a single user from the names array of objects in the 
+            // MainFactory, I have to get the value of the index key...
+            $scope.name = data[$routeParams.index];
+          });
+        }]);
     </script>
 </html>
