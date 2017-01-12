@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" ng-app='nameApp'>
+    <head>
+        <title></title>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-route/angular-route.js"></script>
+    </head>
+    <body ng-controller='MainController'>
+        <a href="#!/main">/main</a>
+        <ng-view></ng-view>
+        <form>
+            <label >Name:</label>
+            <input type="text" name="name" ng-model="name" ng-blur="addName()">
+        </form>
+        <ul>
+            <li ng-repeat="name in names track by $index">{{ name }}</li>
+        </ul>
+
+    </body>
+    <script>
+        var nameApp = angular.module('nameApp', ['ngRoute']);
+        nameApp.config(['$routeProvider', function($routeProvider){
+            $routeProvider.when('/main', {
+                controller: 'TestController',
+                templateUrl: "partials/_main.html"
+            });
+        }]);
+        nameApp.controller('MainController', ['$scope', function($scope){
+            $scope.names = ['Richard','Kelda', 'Quinten'];
+            $scope.addName = function(){
+                $scope.names.push($scope.name);
+                $scope.name = '';
+            }
+        }]);
+        nameApp.controller('TestController', function($scope){
+            $scope.alertHello = function(){
+                console.log('hello')
+                alert('Hello!');
+            }
+        });
+    </script>
+</html>
