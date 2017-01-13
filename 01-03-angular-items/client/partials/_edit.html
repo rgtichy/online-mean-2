@@ -1,0 +1,14 @@
+<h4>Name: {{ name.name }}</h4>
+<form>
+  <div class='row'>
+    <label class='col-md-1'>Name:</label>
+    <input class='col-md-3' type='text' name="name" ng-model="name.name"/>
+    <label class='col-md-1'>Age:</label>
+    <input class='col-md-1' type='number' ng-model="name.age"/>
+  </div>
+</form>
+<!-- <p>Age: {{ name.age }}</p> -->
+<div class='row'>
+  <a class='col-md-1 btn btn-primary' href="#!/">Back</a>
+  <a class='col-md-1 col-md-offset-1 btn btn-danger' href="#!/" ng-click="deleteName()">Remove</a>
+</div>

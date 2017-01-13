@@ -1,8 +1,9 @@
 <form ng-submit="addName()">
     <input type="text" ng-model="newName.name" placeholder="Name">
-    <input type="text" ng-model="newName.age" placeholder="Age">
-    <input type="submit" value="Add User">
+    <input type="number" ng-model="newName.age" placeholder="Age">
+    <input class='btn btn-success' type="submit" value="Add User">
 </form>
+<h4>People</h4>
 <ul>
-    <li ng-repeat="name in names track by $index">Name: <a href="#!/{{ $index }}">{{ name.name }}</a></li>
+    <div class='row'  ng-repeat="name in names track by $index"><li class='col-md-8'>Name: <a href="#!/{{ $index }}">{{ name.name }}</a></a></li><a class='btn btn-xs btn-primary' href="#!/{{ $index }}/edit">Edit</a></div>
 </ul>

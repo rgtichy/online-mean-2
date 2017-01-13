@@ -1,4 +1,6 @@
-<p>Show a name</p>
-<p>Name: {{ name.name }}</p>
+<h4>Name: {{ name.name }}</h4>
 <p>Age: {{ name.age }}</p>
-<a href="#!/">Back</a>
+<div class='row'>
+  <a class='col-md-1 btn btn-primary' href="#!/">Back</a>
+  <a class='col-md-1 col-md-offset-1 btn btn-danger' href="#!/" ng-click="deleteName()">Remove</a>
+</div>

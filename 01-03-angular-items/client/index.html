@@ -2,14 +2,18 @@
 <html lang="en" ng-app='nameApp'>
     <head>
         <title></title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="main.css">
         <script src="js/angular/angular.js"></script>
         <script src="js/angular-route/angular-route.js"></script>
     </head>
 
     <body>
-      <div>
-        <ng-view></ng-view>
+      <div class='container'>
+        <h3>nameApp</h3>
+        <div>
+          <ng-view></ng-view>
+        </div>
       </div>
     </body>
     <script>
@@ -24,6 +28,10 @@
             .when('/:index', {
               controller: "UserController",
               templateUrl: "partials/_user.html"
+            })
+            .when('/:index/edit', {
+              controller: "UserController",
+              templateUrl: "partials/_edit.html"
             })
             .otherwise({
               redirectTo: '/main'
@@ -44,6 +52,10 @@
           factory.getOneName = function(callback){
             callback(names);
           };
+          factory.deleteUser = function(idx){
+            console.log("- remove @ index",idx);
+            names.splice(idx, 1);
+          }
           return factory;
         });
         // MainController
@@ -63,10 +75,10 @@
           console.log('UserController loaded');
           $scope.name = {};
           $scope.deleteName = function(){
-            MainFactory.deleteUser( $routeParams.index )
+            MainFactory.deleteUser( $routeParams.index );
           }
           MainFactory.getOneName(function(data){
-            // To get a single user from the names array of objects in the 
+            // To get a single user from the names array of objects in the
             // MainFactory, I have to get the value of the index key...
             $scope.name = data[$routeParams.index];
           });
