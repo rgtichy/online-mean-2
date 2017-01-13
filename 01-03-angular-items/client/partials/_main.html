@@ -1,0 +1,8 @@
+<form ng-submit="addName()">
+    <input type="text" ng-model="newName.name" placeholder="Name">
+    <input type="text" ng-model="newName.age" placeholder="Age">
+    <input type="submit" value="Add User">
+</form>
+<ul>
+    <li ng-repeat="name in names track by $index">Name: <a href="#!/{{ $index }}">{{ name.name }}</a></li>
+</ul>

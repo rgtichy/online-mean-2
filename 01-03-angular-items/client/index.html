@@ -3,39 +3,35 @@
     <head>
         <title></title>
         <link rel="stylesheet" type="text/css" href="main.css">
-        <script src="angular/angular.js"></script>
-        <script src="angular-route/angular-route.js"></script>
+        <script src="js/angular/angular.js"></script>
+        <script src="js/angular-route/angular-route.js"></script>
     </head>
 
-    <body ng-controller='MainController'>
+    <body>
       <div>
-        <a href="#!/">home</a>
         <ng-view></ng-view>
-        <form ng-submit="addName()">
-          <input type="text" ng-model="newName.name" placeholder="Name">
-          <input type="text" ng-model="newName.age" placeholder="Age">
-          <input class="hidden" type="submit" value="Add User">
-        </form>
-        <ul>
-          <li ng-repeat="name in names track by $index">Name: <a href="#!/{{ $index }}">{{ name.name }}</a></li>
-        </ul>
       </div>
     </body>
     <script>
         var nameApp = angular.module("nameApp", ["ngRoute"]);
 
         nameApp.config(["$routeProvider", function($routeProvider){
-            $routeProvider.when("/main", {
-                controller: "TestController",
+            $routeProvider
+            .when("/main", {
+                controller: "MainController",
                 templateUrl: "partials/_main.html"
             })
             .when('/:index', {
               controller: "UserController",
               templateUrl: "partials/_user.html"
-            });
+            })
+            .otherwise({
+              redirectTo: '/main'
+            })
         }]);
         // MainFactory
         nameApp.factory("MainFactory", function(){
+          console.log('MainFactory loaded');
           var names = [
             { name: "Richard", age: 23 },
             { name: "Kelda", age: 21 },
@@ -52,6 +48,7 @@
         });
         // MainController
         nameApp.controller('MainController', ['$scope', 'MainFactory', function($scope, MainFactory){
+          console.log('MainController loaded');
           $scope.names = [];
           MainFactory.getNames(function(data){
             $scope.names = data;
@@ -63,7 +60,11 @@
         }]);
         // UserController
         nameApp.controller('UserController', ['$scope', 'MainFactory', '$routeParams', function($scope, MainFactory, $routeParams){
+          console.log('UserController loaded');
           $scope.name = {};
+          $scope.deleteName = function(){
+            MainFactory.deleteUser( $routeParams.index )
+          }
           MainFactory.getOneName(function(data){
             // To get a single user from the names array of objects in the 
             // MainFactory, I have to get the value of the index key...
