@@ -33,6 +33,10 @@
               controller: "UserController",
               templateUrl: "partials/_edit.html"
             })
+            .when('/edit', {
+              controller: "UserController",
+              templateUrl: "partials/_edit.html"
+            })
             .otherwise({
               redirectTo: '/main'
             })
@@ -40,12 +44,12 @@
         // MainFactory
         nameApp.factory("MainFactory", function(){
           console.log('MainFactory loaded');
+          var factory = {};
           var names = [
             { name: "Richard", age: 23 },
             { name: "Kelda", age: 21 },
             { name: "Quinten", age: 22 },
           ];
-          var factory = {};
           factory.getNames = function(callback){
             callback(names);
           };
@@ -81,7 +85,15 @@
             // To get a single user from the names array of objects in the
             // MainFactory, I have to get the value of the index key...
             $scope.name = data[$routeParams.index];
+            $scope.userIndex = $routeParams.index;
+            console.log('here!',$scope,$scope.name,$scope.userIndex)
           });
+          // MainFactory.getOneName(function($routeParams.index){
+          //   // To get a single user from the names array of objects in the
+          //   // MainFactory, I have to get the value of the index key...
+          //   $scope.name = data[$routeParams.index];
+          //   console.log('here!',$scope,$scope.name)
+          // });
         }]);
     </script>
 </html>
