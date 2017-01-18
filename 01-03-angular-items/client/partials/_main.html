@@ -5,5 +5,5 @@
 </form>
 <h4>People</h4>
 <ul>
-    <div class='row'  ng-repeat="name in names track by $index"><li class='col-md-8'>Name: <a href="#!/{{ $index }}">{{ name.name }}</a></a></li><a class='btn btn-xs btn-primary' href="#!/{{ $index }}/edit">Edit</a></div>
+    <div class='row'  ng-repeat="user in names track by $index"><li class='col-md-8'>Name: <a href="#!/{{ user._id }}">{{ user.name }}</a></a></li><a class='btn btn-xs btn-primary' href="#!/{{ user._id }}/edit">Edit</a></div>
 </ul>

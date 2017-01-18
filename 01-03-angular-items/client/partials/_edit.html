@@ -2,12 +2,14 @@
 <form>
   <div class='row'>
     <label class='col-md-1'>Name:</label>
-    <input class='col-md-3' type='text' name="name" ng-model="name.name"/>
+    <input class='col-md-3' type='text' name="name" ng-model="editName.name"/>
     <label class='col-md-1'>Age:</label>
-    <input class='col-md-1' type='number' ng-model="name.age"/>
+    <input class='col-md-1' type='number' ng-model="editName.age"/>
   </div>
 </form>
+<hr />
 <div class='row'>
   <a class='col-md-1 btn btn-primary' href="#!/">Back</a>
+  <a class='col-md-1 col-md-offset-1 btn btn-success' href='#!/' ng-click='updateName()'>Update</a>
   <a class='col-md-1 col-md-offset-1 btn btn-danger' href="#!/" ng-click="deleteName()">Remove</a>
 </div>

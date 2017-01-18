@@ -42,58 +42,103 @@
             })
         }]);
         // MainFactory
-        nameApp.factory("MainFactory", function(){
+        nameApp.factory("MainFactory", ['$http',function($http){
           console.log('MainFactory loaded');
           var factory = {};
-          var names = [
-            { name: "Richard", age: 23 },
-            { name: "Kelda", age: 21 },
-            { name: "Quinten", age: 22 },
-          ];
+
           factory.getNames = function(callback){
-            callback(names);
+            $http({
+              url: '/names',
+              method: 'GET',
+            })
+            .then( callback )
+            .catch( function(error){
+              console.log(error)
+            } );
           };
-          factory.getOneName = function(callback){
-            callback(names);
+
+          factory.getOneName = function($index,callback){
+            $http({
+              url: `/names/${$index}`,
+              method: 'GET',
+            })
+            .then(callback)
+            .catch( function(error){
+              console.log(error)
+            } );
           };
+
           factory.deleteUser = function(idx){
-            console.log("- remove @ index",idx);
-            names.splice(idx, 1);
+            $http.post(`/names/${idx}/destroy`,{'_id':idx})
+            .then(callback)
+            .catch( function(error){
+              console.log(error) } )
           }
+
+          factory.addUser = function(newNameObj,callback){
+            $http.post('/names',newNameObj)
+            .then(callback)
+            .catch( function(error){
+              console.log(error)
+            } );
+          }
+
+          factory.editUser = function(editUserObj,callback){
+            $http.post(`/names/${editUserObj._id}`,editUserObj)
+            .then(callback)
+            .catch( function(error){
+              console.log(error)
+            } );
+          }
+
           return factory;
-        });
+        }]);
         // MainController
         nameApp.controller('MainController', ['$scope', 'MainFactory', function($scope, MainFactory){
           console.log('MainController loaded');
           $scope.names = [];
-          MainFactory.getNames(function(data){
-            $scope.names = data;
+          MainFactory.getNames(function(response){
+            $scope.names = response.data;
           });
           $scope.addName = function(){
-            $scope.names.push($scope.newName);
-            $scope.newName = {};
-          };
+            MainFactory.addUser($scope.newName,function(response){
+              console.log(response)
+              if(response.data._id){
+                $scope.names.push(response.data);
+                $scope.newName={};
+                console.log($scope.names)
+              }
+            });
+          }
         }]);
         // UserController
         nameApp.controller('UserController', ['$scope', 'MainFactory', '$routeParams', function($scope, MainFactory, $routeParams){
           console.log('UserController loaded');
           $scope.name = {};
+
           $scope.deleteName = function(){
             MainFactory.deleteUser( $routeParams.index );
           }
-          MainFactory.getOneName(function(data){
+
+          $scope.updateName = function(){
+            MainFactory.editUser($scope.editName,function(response){
+              console.log(response)
+              if(response.data.success===true){
+                $scope.name.name=editName.name;
+                $scope.name.age=editName.age;
+                $scope.editName={};
+                console.log($scope.names)
+              }
+            });
+          }
+
+          MainFactory.getOneName($routeParams.index, function(response){
             // To get a single user from the names array of objects in the
             // MainFactory, I have to get the value of the index key...
-            $scope.name = data[$routeParams.index];
+            $scope.name = response.data;
+            $scope.editName = $scope.name;
             $scope.userIndex = $routeParams.index;
-            console.log('here!',$scope,$scope.name,$scope.userIndex)
           });
-          // MainFactory.getOneName(function($routeParams.index){
-          //   // To get a single user from the names array of objects in the
-          //   // MainFactory, I have to get the value of the index key...
-          //   $scope.name = data[$routeParams.index];
-          //   console.log('here!',$scope,$scope.name)
-          // });
         }]);
     </script>
 </html>
